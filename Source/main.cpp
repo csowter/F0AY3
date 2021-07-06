@@ -1,4 +1,5 @@
 #include "stm32f0xx.h"
+#include "AY3IO.h"
 /*
 d0 - pb2
 d1 - pb3
@@ -12,7 +13,7 @@ d7 - pb9
 bc1 - pc3
 bdir - pc4
 nReset - pc10
-clk - pa1 - tim2 ch 2
+clk - pc6 - tim3 ch 1
 
 */
 
@@ -22,7 +23,9 @@ int main()
 				   RCC_AHBENR_GPIOBEN |
 				   RCC_AHBENR_GPIOCEN;
 	
-	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
+	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN |
+					RCC_APB1ENR_TIM3EN;
+
 	
 	asm("dsb");
 	
@@ -34,14 +37,57 @@ int main()
 	GPIOC->BRR = (1 << 3) | (1 << 4);
 	GPIOC->MODER |= ((1 << GPIO_MODER_MODER3_Pos) | ( 1 << GPIO_MODER_MODER4_Pos));
 	
-	TIM2->CCMR1 = 3 << TIM_CCMR1_OC2M_Pos; //set to toggle
-	TIM2->CCR2 = 15;
-	TIM2->ARR = 15;
-	TIM2->CCER = TIM_CCER_CC2E;
+	//pc6 afio for clock
+	GPIOC->MODER |= (2 << GPIO_MODER_MODER6_Pos);
+	
+	TIM2->PSC = 47;
+	TIM2->ARR = 0xFFFFFFFF;
+	TIM2->EGR = TIM_EGR_UG; //generate an update event
+	TIM2->CNT = 0;
 	TIM2->CR1 = TIM_CR1_CEN; //switch on
 	
-	GPIOA->MODER |= (2 << GPIO_MODER_MODER1_Pos); //clock out pin af
-	GPIOA->AFR[0] |= (2 << GPIO_AFRL_AFRL1_Pos); //make pin af
+	//tim 3 used for AY3 clock, 1.5 MHz
+	TIM3->CCMR1 = 3 << TIM_CCMR1_OC1M_Pos; //set to toggle
+	TIM3->CCR1 = 15;
+	TIM3->ARR = 15;
+	TIM3->CCER = TIM_CCER_CC1E;
+	TIM3->CR1 = TIM_CR1_CEN; //switch on
 	
-	while(1);
+	//take ay out of reset
+	GPIOC->BSRR = 1 << 10;
+	
+	uint32_t now = TIM2->CNT;
+	while(TIM2->CNT < (now + 500000)); //wait 0.5 s
+	
+	AY3IO ay3IO;
+	
+	ay3IO.WriteAddress(7); //register 7 - mixer
+	ay3IO.WriteData(0xFE); // turn on tone A
+	
+	ay3IO.WriteAddress(8); //channel a amplitude
+	ay3IO.WriteData(0xf);
+	
+	ay3IO.WriteAddress(9); //channel a amplitude
+	ay3IO.WriteData(0x0);
+	
+	ay3IO.WriteAddress(10); //channel a amplitude
+	ay3IO.WriteData(0x0);
+
+	ay3IO.WriteAddress(0);
+	ay3IO.WriteData(0xAA);
+
+	ay3IO.WriteAddress(1);
+	ay3IO.WriteData(0xA);
+	
+	
+	ay3IO.WriteAddress(0xE);
+	while(1)
+	{
+		ay3IO.WriteData(0x01);
+		uint32_t now = TIM2->CNT;
+		while(TIM2->CNT < (now + 1000000));
+		ay3IO.WriteData(0x0);
+		now = TIM2->CNT;
+		while(TIM2->CNT < (now + 500000));
+	}
 }
