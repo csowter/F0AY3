@@ -26,16 +26,23 @@ void SetDataPinsIn()
 					  GPIO_MODER_MODER8_Msk | 
 					  GPIO_MODER_MODER9_Msk);
 }
+
+void usDelay(uint32_t us)
+{
+	uint32_t now = TIM2->CNT;
+	while(TIM2->CNT < (now + us));
 }
+
+}
+
+
 
 void AY3IO::WriteData(uint8_t data)
 {
-	
 	// set port b2-b9 to have data
 	uint16_t lowWord = data << 2;
-	uint32_t highWord = ~data;
-	highWord &= 0x3FC;
-	GPIOB->BSRR = (highWord << 16) | lowWord;
+	GPIOB->BRR = 0x3FC;
+	GPIOB->BSRR = lowWord;
 	
 	SetDataPinsOut();
 	
@@ -44,11 +51,10 @@ void AY3IO::WriteData(uint8_t data)
 	//bdir - pc4
 	
 	GPIOC->BSRR = (0x1 << 4) | (0x1 << 19);
-	
-	uint32_t startCount = TIM2->CNT;
-	while(TIM2->CNT < (startCount + 100)); //wait 10 uS
+	usDelay(10);
 	
 	GPIOC->BRR = (0x1 << 4) | (0x1 << 3); //clear bdir and bc1
+	usDelay(2);
 	SetDataPinsIn(); //make bus high z
 }
 	
@@ -61,17 +67,15 @@ void AY3IO::WriteAddress(uint8_t address)
 {
 // set port b2-b9 to have address
 	uint16_t lowWord = address << 2;
-	uint16_t highWord = ~address;
-	highWord &= 0x3FC;
-	GPIOB->BSRR = (highWord << 16) | lowWord;
+	GPIOB->BRR = 0x3FC;
+	GPIOB->BSRR = lowWord;
 	
 	SetDataPinsOut();
 	
 	GPIOC->BSRR = (0x1 << 3) | (0x1 << 4);
-	
-	uint32_t startCount = TIM2->CNT;
-	while(TIM2->CNT < (startCount + 100)); //wait 10 uS
+	usDelay(10);
 	
 	GPIOC->BRR = (0x1 << 4) | (0x1 << 3); //clear bdir and bc1
+	usDelay(2);
 	SetDataPinsIn(); //make bus high z
 }

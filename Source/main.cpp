@@ -17,6 +17,14 @@ clk - pc6 - tim3 ch 1
 
 */
 
+namespace{
+void usDelay(uint32_t us)
+{
+	uint32_t now = TIM2->CNT;
+	while(TIM2->CNT < (now + us));
+}
+}
+
 int main()
 {
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | 
@@ -62,23 +70,39 @@ int main()
 	AY3IO ay3IO;
 	
 	ay3IO.WriteAddress(7); //register 7 - mixer
-	ay3IO.WriteData(0xFE); // turn on tone A
-	
+	usDelay(2);
+	ay3IO.WriteData(0xF8); // turn on tone A & B
+	usDelay(2);
 	ay3IO.WriteAddress(8); //channel a amplitude
-	ay3IO.WriteData(0xf);
-	
-	ay3IO.WriteAddress(9); //channel a amplitude
+	usDelay(2);
+	ay3IO.WriteData(0xF);
+	usDelay(2);
+	ay3IO.WriteAddress(9); //channel b amplitude
+	usDelay(2);
 	ay3IO.WriteData(0x0);
-	
-	ay3IO.WriteAddress(10); //channel a amplitude
+	usDelay(2);
+	ay3IO.WriteAddress(10); //channel c amplitude
+	usDelay(2);
 	ay3IO.WriteData(0x0);
-
+	usDelay(2);
 	ay3IO.WriteAddress(0);
-	ay3IO.WriteData(0xAA);
-
+	usDelay(2);
+	ay3IO.WriteData(0xff);
+	usDelay(2);
 	ay3IO.WriteAddress(1);
-	ay3IO.WriteData(0xA);
+	usDelay(2);
+	ay3IO.WriteData(0xf);
+	usDelay(2);
 	
+	ay3IO.WriteAddress(2);
+	usDelay(2);
+	ay3IO.WriteData(0x55);
+	usDelay(2);
+	
+	ay3IO.WriteAddress(4);
+	usDelay(2);
+	ay3IO.WriteData(0x33);
+	usDelay(2);
 	
 	ay3IO.WriteAddress(0xE);
 	while(1)
