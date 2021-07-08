@@ -1,5 +1,6 @@
 #include "stm32f0xx.h"
 #include "AY3IO.h"
+#include "AY3.h"
 /*
 d0 - pb2
 d1 - pb3
@@ -16,14 +17,6 @@ nReset - pc10
 clk - pc6 - tim3 ch 1
 
 */
-
-namespace{
-void usDelay(uint32_t us)
-{
-	uint32_t now = TIM2->CNT;
-	while(TIM2->CNT < (now + us));
-}
-}
 
 int main()
 {
@@ -68,50 +61,21 @@ int main()
 	while(TIM2->CNT < (now + 500000)); //wait 0.5 s
 	
 	AY3IO ay3IO;
+	AY3 ay3(&ay3IO);
 	
-	ay3IO.WriteAddress(7); //register 7 - mixer
-	usDelay(2);
-	ay3IO.WriteData(0xF8); // turn on tone A & B
-	usDelay(2);
-	ay3IO.WriteAddress(8); //channel a amplitude
-	usDelay(2);
-	ay3IO.WriteData(0xF);
-	usDelay(2);
-	ay3IO.WriteAddress(9); //channel b amplitude
-	usDelay(2);
-	ay3IO.WriteData(0x0);
-	usDelay(2);
-	ay3IO.WriteAddress(10); //channel c amplitude
-	usDelay(2);
-	ay3IO.WriteData(0x0);
-	usDelay(2);
-	ay3IO.WriteAddress(0);
-	usDelay(2);
-	ay3IO.WriteData(0xff);
-	usDelay(2);
-	ay3IO.WriteAddress(1);
-	usDelay(2);
-	ay3IO.WriteData(0xf);
-	usDelay(2);
+	ay3.EnableTone(true, 0);
+	ay3.SetAmplitude(0xc, 0);
+	ay3.EnableEnvelope(true, 0);
+
+	ay3.EnableNoise(true, 1);
+	ay3.SetAmplitude(0x5, 1);
+	ay3.EnableEnvelope(true, 1);
+
+	ay3.SetEnvelopePeriod(0xc00);
+	ay3.SetEnvelopeMode(0xE);
+	ay3.SetTonePeriod(0x80, 0);
+	ay3.SetNoisePeriod(0x10);
 	
-	ay3IO.WriteAddress(2);
-	usDelay(2);
-	ay3IO.WriteData(0x55);
-	usDelay(2);
 	
-	ay3IO.WriteAddress(4);
-	usDelay(2);
-	ay3IO.WriteData(0x33);
-	usDelay(2);
-	
-	ay3IO.WriteAddress(0xE);
-	while(1)
-	{
-		ay3IO.WriteData(0x01);
-		uint32_t now = TIM2->CNT;
-		while(TIM2->CNT < (now + 1000000));
-		ay3IO.WriteData(0x0);
-		now = TIM2->CNT;
-		while(TIM2->CNT < (now + 500000));
-	}
+	while(1);
 }

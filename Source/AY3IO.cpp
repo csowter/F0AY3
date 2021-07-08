@@ -73,7 +73,7 @@ void AY3IO::WriteAddress(uint8_t address)
 	SetDataPinsOut();
 	
 	GPIOC->BSRR = (0x1 << 3) | (0x1 << 4);
-	usDelay(10);
+	usDelay(2);
 	
 	GPIOC->BRR = (0x1 << 4) | (0x1 << 3); //clear bdir and bc1
 	usDelay(2);
