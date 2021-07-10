@@ -1,0 +1,32 @@
+#ifndef f0ay3descriptors_h
+#define f0ay3descriptors_h
+
+#include "Descriptors.h"
+#include "MIDIDescriptors.h"
+#include "UAC1Descriptors.h"
+
+class AY3Descriptors
+{
+public:
+	__packed struct sConfigurationDescriptor
+	{
+		sStandardConfigurationDescriptor standardConfigurationDescriptor;
+		sStandardAudioControlInterfaceDescriptor standardAudioControlInterfaceDescriptor;
+		sClassSpecificAudioControlInterfaceDescriptor classSpecificAudioControlInterfaceDescriptor;
+		sStandardMIDIStreamingInterfaceDescriptor standardMIDIStreamingInterfaceDescriptor;
+		sClassSpecificMIDIStreamingInterfaceDescriptor classSpecificMIDIStreamingInterfaceDescriptor;
+		sMIDIInJackDescriptor MIDIInJackDescriptorEmbedded;
+		sMIDIInJackDescriptor MIDIInJackDescriptorExternal;
+		sMIDIOutJackDescriptor MIDIOutJackDescriptorEmbedded;
+		sMIDIOutJackDescriptor MIDIOutJackDescriptorExternal;
+		sStandardMIDIStreamingBulkDataEndpointDescriptor standardBulkOutEndpointDescriptor;
+		sClassSpecificMIDIStreamingBulkDataEndpointDescriptor classSpecificBulkOutEndpointDescriptor;
+		sStandardMIDIStreamingBulkDataEndpointDescriptor standardBulkInEndpointDescriptor;
+		sClassSpecificMIDIStreamingBulkDataEndpointDescriptor classSpecificBulkInEnpointDescriptor;
+	};
+
+	static const sStandardDeviceDescriptor DeviceDescriptor;
+	static const sConfigurationDescriptor ConfigurationDescriptor;
+};
+
+#endif

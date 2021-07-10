@@ -1,6 +1,11 @@
 #include "stm32f0xx.h"
 #include "AY3IO.h"
 #include "AY3.h"
+
+#include "DebugUART.h"
+
+#include "F0AY3Descriptors.h"
+
 /*
 d0 - pb2
 d1 - pb3
@@ -16,18 +21,21 @@ bdir - pc4
 nReset - pc10
 clk - pc6 - tim3 ch 1
 
+PA2 debug uart2 tx
+
 */
 
 int main()
 {
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | 
 				   RCC_AHBENR_GPIOBEN |
-				   RCC_AHBENR_GPIOCEN;
+				   RCC_AHBENR_GPIOCEN |
+				   RCC_APB1ENR_USBEN;
 	
 	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN |
-					RCC_APB1ENR_TIM3EN;
-
-	
+					RCC_APB1ENR_TIM3EN |
+					RCC_APB1ENR_USART2EN;;
+		
 	asm("dsb");
 	
 	//put ay3 in reset
@@ -76,6 +84,16 @@ int main()
 	ay3.SetTonePeriod(0x80, 0);
 	ay3.SetNoisePeriod(0x10);
 	
+	GPIOA->MODER |= (2 << GPIO_MODER_MODER2_Pos);
+	GPIOA->AFR[0] |= (1 << GPIO_AFRL_AFRL2_Pos);
+	DebugUART uart(USART2, 48000000, 115200);
 	
-	while(1);
+	GPIOA->MODER |= (3 << GPIO_MODER_MODER11_Pos) | (3 << GPIO_MODER_MODER12_Pos);  //GPIOA 11 & 12 analogue for USB
+	
+	while(1)
+	{
+		uart.DebugTx((uint8_t *)"Hello\r\n", 7);
+		uint32_t now = TIM2->CNT;
+		while(TIM2->CNT < (now + 1000000));
+	}
 }
