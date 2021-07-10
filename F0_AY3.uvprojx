@@ -409,6 +409,16 @@
               <FileType>8</FileType>
               <FilePath>.\Source\AY3.cpp</FilePath>
             </File>
+            <File>
+              <FileName>DebugUART.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Source\DebugUART.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>F0AY3Descriptors.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Source\F0AY3Descriptors.cpp</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

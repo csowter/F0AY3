@@ -18,7 +18,7 @@ const sStandardDeviceDescriptor AY3Descriptors::DeviceDescriptor =
 	0x01//uint8_t bNumConfigurations;
 };
 
-const AY3Descriptors::sConfigurationDescriptor ConfigurationDescriptor = 
+const AY3Descriptors::sConfigurationDescriptor AY3Descriptors::ConfigurationDescriptor = 
 {
 	{ //Standard Configuration descriptor
 		0x09, //uint8_t bLength;

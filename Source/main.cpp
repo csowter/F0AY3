@@ -90,10 +90,13 @@ int main()
 	
 	GPIOA->MODER |= (3 << GPIO_MODER_MODER11_Pos) | (3 << GPIO_MODER_MODER12_Pos);  //GPIOA 11 & 12 analogue for USB
 	
+	uart.DebugTx((uint8_t *)"config", 6);
+	uart.DebugTx((uint8_t *)&AY3Descriptors::ConfigurationDescriptor, sizeof(AY3Descriptors::ConfigurationDescriptor));
+	uart.DebugTx((uint8_t *)"device", 6);
+	uart.DebugTx((uint8_t *)&AY3Descriptors::DeviceDescriptor, sizeof(AY3Descriptors::DeviceDescriptor));
+	
 	while(1)
 	{
-		uart.DebugTx((uint8_t *)"Hello\r\n", 7);
-		uint32_t now = TIM2->CNT;
-		while(TIM2->CNT < (now + 1000000));
+
 	}
 }
