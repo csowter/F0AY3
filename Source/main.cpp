@@ -3,8 +3,10 @@
 #include "AY3.h"
 
 #include "DebugUART.h"
+#include "STMTimer.h"
 
 #include "F0AY3Descriptors.h"
+#include "USB.h"
 
 /*
 d0 - pb2
@@ -29,12 +31,13 @@ int main()
 {
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN | 
 				   RCC_AHBENR_GPIOBEN |
-				   RCC_AHBENR_GPIOCEN |
-				   RCC_APB1ENR_USBEN;
+				   RCC_AHBENR_GPIOCEN;
+				   
 	
 	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN |
 					RCC_APB1ENR_TIM3EN |
-					RCC_APB1ENR_USART2EN;;
+					RCC_APB1ENR_USART2EN |
+					RCC_APB1ENR_USBEN;
 		
 	asm("dsb");
 	
@@ -49,11 +52,7 @@ int main()
 	//pc6 afio for clock
 	GPIOC->MODER |= (2 << GPIO_MODER_MODER6_Pos);
 	
-	TIM2->PSC = 47;
-	TIM2->ARR = 0xFFFFFFFF;
-	TIM2->EGR = TIM_EGR_UG; //generate an update event
-	TIM2->CNT = 0;
-	TIM2->CR1 = TIM_CR1_CEN; //switch on
+	STMTimer microSecondTimer(TIM2, 47, 0xFFFFFFFF);
 	
 	//tim 3 used for AY3 clock, 1.5 MHz
 	TIM3->CCMR1 = 3 << TIM_CCMR1_OC1M_Pos; //set to toggle
@@ -94,6 +93,9 @@ int main()
 	uart.DebugTx((uint8_t *)&AY3Descriptors::ConfigurationDescriptor, sizeof(AY3Descriptors::ConfigurationDescriptor));
 	uart.DebugTx((uint8_t *)"device", 6);
 	uart.DebugTx((uint8_t *)&AY3Descriptors::DeviceDescriptor, sizeof(AY3Descriptors::DeviceDescriptor));
+	
+	USBDevice usb(USB, &microSecondTimer);
+	usb.HardwareInit();
 	
 	while(1)
 	{
