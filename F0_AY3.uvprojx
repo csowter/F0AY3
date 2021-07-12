@@ -419,6 +419,21 @@
               <FileType>8</FileType>
               <FilePath>.\Source\F0AY3Descriptors.cpp</FilePath>
             </File>
+            <File>
+              <FileName>STMTimer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Source\STMTimer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USB.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Source\USB.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SoftTimer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Source\SoftTimer.cpp</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
