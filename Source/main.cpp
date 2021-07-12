@@ -37,7 +37,8 @@ int main()
 	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN |
 					RCC_APB1ENR_TIM3EN |
 					RCC_APB1ENR_USART2EN |
-					RCC_APB1ENR_USBEN;
+					RCC_APB1ENR_USBEN |
+					RCC_APB1ENR_CRSEN;
 		
 	asm("dsb");
 	
@@ -93,6 +94,8 @@ int main()
 	uart.DebugTx((uint8_t *)&AY3Descriptors::ConfigurationDescriptor, sizeof(AY3Descriptors::ConfigurationDescriptor));
 	uart.DebugTx((uint8_t *)"device", 6);
 	uart.DebugTx((uint8_t *)&AY3Descriptors::DeviceDescriptor, sizeof(AY3Descriptors::DeviceDescriptor));
+	
+	CRS->CR = CRS_CR_AUTOTRIMEN | CRS_CR_CEN; //enable clock recovery to trim hsi48
 	
 	USBDevice usb(USB, &microSecondTimer);
 	usb.HardwareInit();

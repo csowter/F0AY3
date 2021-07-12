@@ -1,5 +1,6 @@
 #include "USB.h"
 #include "SoftTimer.h"
+#include "USBStructures.h"
 
 const STM32F072USB::BufferDescription USBDevice::PMABufferDescriptorTable[] = 
 {
@@ -52,9 +53,78 @@ void USBDevice::EnableInterrupts()
 	NVIC_EnableIRQ(USB_IRQn);
 }
 
+void USBDevice::UserToPMABufferCopy(uint8_t *pbUsrBuf, uint16_t wPMABufAddr, uint16_t wNBytes)
+{
+  uint32_t n = (wNBytes + 1) >> 1; 
+  uint32_t i;
+  uint16_t temp1, temp2;
+  uint16_t *pdwVal;
+  pdwVal = (uint16_t *)(wPMABufAddr + STM32F072USB::PMABaseAddress);
+  
+  for (i = n; i != 0; i--)
+  {
+    temp1 = (uint16_t) * pbUsrBuf;
+    pbUsrBuf++;
+    temp2 = temp1 | (uint16_t) * pbUsrBuf << 8;
+    *pdwVal++ = temp2;
+    pbUsrBuf++;
+  }
+}
+
+void USBDevice::PMAToUserBufferCopy(uint8_t *pbUsrBuf, uint16_t wPMABufAddr, uint16_t wNBytes)
+{
+  uint32_t n = (wNBytes + 1) >> 1;
+  uint32_t i;
+  uint16_t *pdwVal;
+  pdwVal = (uint16_t *)(wPMABufAddr + STM32F072USB::PMABaseAddress);
+  for (i = n; i != 0; i--)
+  {
+    *(uint16_t*)pbUsrBuf++ = *pdwVal++;
+    pbUsrBuf++;
+  }
+}
+
+void USBDevice::EP0CorrectTransferRx()
+{
+	uint32_t rxLength = (*PMABufferDescriptorTable[0].RxCount & 0x01FF);
+	PMAToUserBufferCopy(mEP0RxBuffer, *PMABufferDescriptorTable[0].RxAddress, rxLength);
+	
+	uint8_t *src = mEP0RxBuffer;
+	uint8_t *dst = (uint8_t *)&mRxSetupPacket;
+	
+	for(uint32_t i = 0; i < rxLength; i++)
+		*dst++ = *src++;
+	
+	
+	asm("nop");
+}
+	
+void USBDevice::EP0CorrectTransferTx()
+{}
+
+
 //interrupts
 void USBDevice::CorrectTransferIRQ()
-{}
+{
+	    if((USB->ISTR & USB_ISTR_EP_ID) == 0x0)
+    {
+        if(USB->ISTR & USB_ISTR_DIR)
+        {
+            EP0CorrectTransferRx();
+			mUSB->EP0R = USB_EP_CONTROL | USB_EP_CTR_TX; //clear correct transfer rx
+			
+            if(USB->EP0R & USB_EP_CTR_TX)
+            {
+                EP0CorrectTransferTx();
+            }
+        }
+        else
+        {
+            EP0CorrectTransferTx();
+        }
+    }
+}
+	
 void USBDevice::PacketMemoryIRQ()
 {}
 void USBDevice::ErrorIRQ()

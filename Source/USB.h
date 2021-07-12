@@ -3,6 +3,7 @@
 
 #include "stm32f0xx.h"
 #include "Timer.h"
+#include "USBStructures.h"
 
 namespace STM32F072USB
 {
@@ -80,6 +81,10 @@ class USBDevice
 	USB_TypeDef *mUSB;
 	Timer *mTimer;
 	
+	uint8_t mEP0RxBuffer[64];
+	USBStructures::SetupPacket mRxSetupPacket;
+	
+	
 public:
 	USBDevice(USB_TypeDef *usb, Timer *timer);
 	void HardwareInit();
@@ -95,6 +100,14 @@ public:
 	void StartOfFrameIRQ();
 	void ExpectedStartOfFrameIRQ();
 	void L1RequestIRQ();
+
+	//Control endpoint
+	void EP0CorrectTransferRx();
+	void EP0CorrectTransferTx();
+	
+	//misc
+	void PMAToUserBufferCopy(uint8_t *pbUsrBuf, uint16_t wPMABufAddr, uint16_t wNBytes);
+	void UserToPMABufferCopy(uint8_t *pbUsrBuf, uint16_t wPMABufAddr, uint16_t wNBytes);
 };
 
 #endif
