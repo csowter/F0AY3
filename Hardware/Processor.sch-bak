@@ -1,0 +1,249 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 3 3
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+Text HLabel 9000 2200 2    50   BiDi ~ 0
+AY3_D0
+Text HLabel 9000 2300 2    50   BiDi ~ 0
+AY3_D1
+Text HLabel 9000 2400 2    50   BiDi ~ 0
+AY3_D2
+Text HLabel 9000 2500 2    50   BiDi ~ 0
+AY3_D3
+Text HLabel 9000 2600 2    50   BiDi ~ 0
+AY3_D4
+Text HLabel 9000 2700 2    50   BiDi ~ 0
+AY3_D5
+Text HLabel 9000 2800 2    50   BiDi ~ 0
+AY3_D6
+Text HLabel 9000 2900 2    50   BiDi ~ 0
+AY3_D7
+Text HLabel 9000 3050 2    50   Output ~ 0
+AY3_Clock
+Text HLabel 9000 3150 2    50   Output ~ 0
+AY3_Reset
+Text HLabel 9000 3300 2    50   Output ~ 0
+AY3_BDIR
+Text HLabel 9000 3400 2    50   Output ~ 0
+AY3_BC1
+Text HLabel 7000 2850 0    50   BiDi ~ 0
+USB_DM
+Text HLabel 7000 2700 0    50   BiDi ~ 0
+USB_DP
+$Comp
+L MCU_ST_STM32F0:STM32F072RBTx U?
+U 1 1 60F43F1A
+P 4050 3650
+F 0 "U?" H 4500 1850 50  0000 C CNN
+F 1 "STM32F072RBTx" H 4750 1750 50  0000 C CNN
+F 2 "Package_QFP:LQFP-64_10x10mm_P0.5mm" H 3450 1950 50  0001 R CNN
+F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/datasheet/DM00090510.pdf" H 4050 3650 50  0001 C CNN
+	1    4050 3650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3850 5450 3850 5550
+Wire Wire Line
+	3850 5550 3950 5550
+Wire Wire Line
+	3950 5550 3950 5450
+Wire Wire Line
+	3950 5550 4050 5550
+Wire Wire Line
+	4050 5550 4050 5450
+Connection ~ 3950 5550
+Wire Wire Line
+	4050 5550 4150 5550
+Wire Wire Line
+	4150 5550 4150 5450
+Connection ~ 4050 5550
+Wire Wire Line
+	4150 5550 4250 5550
+Wire Wire Line
+	4250 5550 4250 5450
+Connection ~ 4150 5550
+$Comp
+L power:GND #PWR?
+U 1 1 60F460FC
+P 4050 5650
+F 0 "#PWR?" H 4050 5400 50  0001 C CNN
+F 1 "GND" H 4055 5477 50  0000 C CNN
+F 2 "" H 4050 5650 50  0001 C CNN
+F 3 "" H 4050 5650 50  0001 C CNN
+	1    4050 5650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4050 5650 4050 5550
+Wire Wire Line
+	3850 1850 3850 1750
+Wire Wire Line
+	3850 1750 3950 1750
+Wire Wire Line
+	3950 1750 3950 1850
+Wire Wire Line
+	3950 1750 4050 1750
+Wire Wire Line
+	4050 1750 4050 1850
+Connection ~ 3950 1750
+Wire Wire Line
+	4050 1750 4100 1750
+Wire Wire Line
+	4150 1750 4150 1850
+Connection ~ 4050 1750
+Wire Wire Line
+	4150 1750 4250 1750
+Wire Wire Line
+	4250 1750 4250 1850
+Connection ~ 4150 1750
+Wire Wire Line
+	4250 1750 4350 1750
+Wire Wire Line
+	4350 1750 4350 1850
+Connection ~ 4250 1750
+$Comp
+L Device:C C?
+U 1 1 60F4742E
+P 3650 1550
+F 0 "C?" H 3765 1596 50  0000 L CNN
+F 1 "C" H 3765 1505 50  0000 L CNN
+F 2 "" H 3688 1400 50  0001 C CNN
+F 3 "~" H 3650 1550 50  0001 C CNN
+	1    3650 1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 60F47ABD
+P 3350 1550
+F 0 "C?" H 3465 1596 50  0000 L CNN
+F 1 "C" H 3465 1505 50  0000 L CNN
+F 2 "" H 3388 1400 50  0001 C CNN
+F 3 "~" H 3350 1550 50  0001 C CNN
+	1    3350 1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 60F47C97
+P 3050 1550
+F 0 "C?" H 3165 1596 50  0000 L CNN
+F 1 "C" H 3165 1505 50  0000 L CNN
+F 2 "" H 3088 1400 50  0001 C CNN
+F 3 "~" H 3050 1550 50  0001 C CNN
+	1    3050 1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 60F47ECA
+P 2750 1550
+F 0 "C?" H 2865 1596 50  0000 L CNN
+F 1 "C" H 2865 1505 50  0000 L CNN
+F 2 "" H 2788 1400 50  0001 C CNN
+F 3 "~" H 2750 1550 50  0001 C CNN
+	1    2750 1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 60F4828B
+P 2450 1550
+F 0 "C?" H 2565 1596 50  0000 L CNN
+F 1 "C" H 2565 1505 50  0000 L CNN
+F 2 "" H 2488 1400 50  0001 C CNN
+F 3 "~" H 2450 1550 50  0001 C CNN
+	1    2450 1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 60F48451
+P 2150 1550
+F 0 "C?" H 2265 1596 50  0000 L CNN
+F 1 "C" H 2265 1505 50  0000 L CNN
+F 2 "" H 2188 1400 50  0001 C CNN
+F 3 "~" H 2150 1550 50  0001 C CNN
+	1    2150 1550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3650 1700 3350 1700
+Wire Wire Line
+	3350 1700 3050 1700
+Connection ~ 3350 1700
+Wire Wire Line
+	3050 1700 2900 1700
+Connection ~ 3050 1700
+Wire Wire Line
+	2750 1700 2450 1700
+Connection ~ 2750 1700
+Wire Wire Line
+	2450 1700 2150 1700
+Connection ~ 2450 1700
+$Comp
+L power:GND #PWR?
+U 1 1 60F49A8B
+P 2900 1800
+F 0 "#PWR?" H 2900 1550 50  0001 C CNN
+F 1 "GND" H 2905 1627 50  0000 C CNN
+F 2 "" H 2900 1800 50  0001 C CNN
+F 3 "" H 2900 1800 50  0001 C CNN
+	1    2900 1800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 1800 2900 1700
+Connection ~ 2900 1700
+Wire Wire Line
+	2900 1700 2750 1700
+Wire Wire Line
+	2150 1400 2450 1400
+Wire Wire Line
+	2450 1400 2750 1400
+Connection ~ 2450 1400
+Wire Wire Line
+	2750 1400 2900 1400
+Connection ~ 2750 1400
+Wire Wire Line
+	3050 1400 3350 1400
+Connection ~ 3050 1400
+Wire Wire Line
+	3350 1400 3650 1400
+Connection ~ 3350 1400
+Wire Wire Line
+	3650 1400 4100 1400
+Wire Wire Line
+	4100 1400 4100 1750
+Connection ~ 3650 1400
+Connection ~ 4100 1750
+Wire Wire Line
+	4100 1750 4150 1750
+Wire Wire Line
+	2900 1400 2900 1300
+Connection ~ 2900 1400
+Wire Wire Line
+	2900 1400 3050 1400
+$Comp
+L power:+3.3V #PWR?
+U 1 1 60F4CD50
+P 2900 1300
+F 0 "#PWR?" H 2900 1150 50  0001 C CNN
+F 1 "+3.3V" H 2915 1473 50  0000 C CNN
+F 2 "" H 2900 1300 50  0001 C CNN
+F 3 "" H 2900 1300 50  0001 C CNN
+	1    2900 1300
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC
