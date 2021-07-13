@@ -22,6 +22,7 @@ namespace
 USBDevice::USBDevice(USB_TypeDef *usb, Timer *timer)
 : mUSB{usb}
 , mTimer{timer}
+, mDeviceState{DeviceState::Powered}
 {
 	USBInstance = this;
 }
@@ -157,6 +158,8 @@ void USBDevice::ResetIRQ()
 	mUSB->DADDR = USB_DADDR_EF; //enable on address 0
     
     mUSB->BCDR = USB_BCDR_DPPU; //enable pullup
+	
+	mDeviceState = DeviceState::Default; //move to default state, ready to repond on address 0
 }
 	
 void USBDevice::StartOfFrameIRQ()

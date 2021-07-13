@@ -16,4 +16,14 @@ __packed struct SetupPacket
 static_assert(sizeof(SetupPacket) == 8, "sizeof(SetupPacket) is wrong");
 }
 
+enum class DeviceState
+{
+	Attached,
+	Powered,
+	Default,
+	Address,
+	Configured,
+	Suspended
+};
+
 #endif

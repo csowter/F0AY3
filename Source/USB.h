@@ -83,7 +83,8 @@ class USBDevice
 	
 	uint8_t mEP0RxBuffer[64];
 	USBStructures::SetupPacket mRxSetupPacket;
-	
+
+	DeviceState mDeviceState;
 	
 public:
 	USBDevice(USB_TypeDef *usb, Timer *timer);
